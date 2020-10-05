@@ -1,0 +1,14 @@
+F:\SourceCode\PRACA_INZYNIERSKA\SERWER\CvCreator.Api\CvCreator.Api\bin\Debug\netcoreapp2.2\CvCreator.Api.deps.json
+F:\SourceCode\PRACA_INZYNIERSKA\SERWER\CvCreator.Api\CvCreator.Api\bin\Debug\netcoreapp2.2\CvCreator.Api.runtimeconfig.json
+F:\SourceCode\PRACA_INZYNIERSKA\SERWER\CvCreator.Api\CvCreator.Api\bin\Debug\netcoreapp2.2\CvCreator.Api.runtimeconfig.dev.json
+F:\SourceCode\PRACA_INZYNIERSKA\SERWER\CvCreator.Api\CvCreator.Api\bin\Debug\netcoreapp2.2\CvCreator.Api.dll
+F:\SourceCode\PRACA_INZYNIERSKA\SERWER\CvCreator.Api\CvCreator.Api\bin\Debug\netcoreapp2.2\CvCreator.Api.pdb
+F:\SourceCode\PRACA_INZYNIERSKA\SERWER\CvCreator.Api\CvCreator.Api\obj\Debug\netcoreapp2.2\CvCreator.Api.csprojAssemblyReference.cache
+F:\SourceCode\PRACA_INZYNIERSKA\SERWER\CvCreator.Api\CvCreator.Api\obj\Debug\netcoreapp2.2\CvCreator.Api.csproj.CoreCompileInputs.cache
+F:\SourceCode\PRACA_INZYNIERSKA\SERWER\CvCreator.Api\CvCreator.Api\obj\Debug\netcoreapp2.2\CvCreator.Api.RazorAssemblyInfo.cache
+F:\SourceCode\PRACA_INZYNIERSKA\SERWER\CvCreator.Api\CvCreator.Api\obj\Debug\netcoreapp2.2\CvCreator.Api.RazorAssemblyInfo.cs
+F:\SourceCode\PRACA_INZYNIERSKA\SERWER\CvCreator.Api\CvCreator.Api\obj\Debug\netcoreapp2.2\CvCreator.Api.AssemblyInfoInputs.cache
+F:\SourceCode\PRACA_INZYNIERSKA\SERWER\CvCreator.Api\CvCreator.Api\obj\Debug\netcoreapp2.2\CvCreator.Api.AssemblyInfo.cs
+F:\SourceCode\PRACA_INZYNIERSKA\SERWER\CvCreator.Api\CvCreator.Api\obj\Debug\netcoreapp2.2\CvCreator.Api.RazorTargetAssemblyInfo.cache
+F:\SourceCode\PRACA_INZYNIERSKA\SERWER\CvCreator.Api\CvCreator.Api\obj\Debug\netcoreapp2.2\CvCreator.Api.dll
+F:\SourceCode\PRACA_INZYNIERSKA\SERWER\CvCreator.Api\CvCreator.Api\obj\Debug\netcoreapp2.2\CvCreator.Api.pdb
