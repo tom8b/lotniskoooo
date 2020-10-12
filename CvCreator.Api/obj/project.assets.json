@@ -2,6 +2,91 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v2.2": {
+      "jsreport.AspNetCore/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Http": "2.2.2",
+          "Microsoft.AspNetCore.Mvc": "2.2.0",
+          "jsreport.Shared": "2.0.1",
+          "jsreport.Types": "2.4.1"
+        },
+        "compile": {
+          "lib/netstandard2.0/jsreport.AspNetCore.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/jsreport.AspNetCore.dll": {}
+        }
+      },
+      "jsreport.Binary/2.9.0": {
+        "type": "package",
+        "dependencies": {
+          "jsreport.Shared": "2.2.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/jsreport.Binary.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/jsreport.Binary.dll": {}
+        }
+      },
+      "jsreport.Client/3.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.CSharp": "4.4.0",
+          "Newtonsoft.Json": "10.0.3",
+          "System.Net.Http": "4.3.2",
+          "jsreport.Shared": "2.3.0",
+          "jsreport.Types": "2.7.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/jsreport.Client.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/jsreport.Client.dll": {}
+        }
+      },
+      "jsreport.Local/2.3.0": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "10.0.3",
+          "jsreport.Client": "3.1.0",
+          "jsreport.Shared": "2.3.0",
+          "jsreport.Types": "2.7.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/jsreport.Local.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/jsreport.Local.dll": {}
+        }
+      },
+      "jsreport.Shared/2.3.0": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "10.0.3",
+          "System.IO.Compression": "4.3.0",
+          "jsreport.Types": "2.7.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/jsreport.Shared.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/jsreport.Shared.dll": {}
+        }
+      },
+      "jsreport.Types/2.7.0": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "Newtonsoft.Json": "10.0.3"
+        },
+        "compile": {
+          "lib/netstandard1.6/jsreport.Types.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.6/jsreport.Types.dll": {}
+        }
+      },
       "Microsoft.AspNet.WebApi.Client/5.2.6": {
         "type": "package",
         "dependencies": {
@@ -651,7 +736,7 @@
           "lib/netstandard2.0/Microsoft.AspNetCore.Html.Abstractions.dll": {}
         }
       },
-      "Microsoft.AspNetCore.Http/2.2.0": {
+      "Microsoft.AspNetCore.Http/2.2.2": {
         "type": "package",
         "dependencies": {
           "Microsoft.AspNetCore.Http.Abstractions": "2.2.0",
@@ -3464,7 +3549,7 @@
           "lib/netcoreapp2.1/_._": {}
         }
       },
-      "System.Net.Http/4.3.0": {
+      "System.Net.Http/4.3.2": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.0",
@@ -4442,6 +4527,91 @@
     }
   },
   "libraries": {
+    "jsreport.AspNetCore/2.1.0": {
+      "sha512": "blCOjYA0v4mZy/0olcQ43KM8UNlYERCeVM6Hxcuh1xfhbW+QaBydJJ5DR5nHrHApJHT5/kFkdpu+kzftwDfF6w==",
+      "type": "package",
+      "path": "jsreport.aspnetcore/2.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "jsreport.aspnetcore.2.1.0.nupkg.sha512",
+        "jsreport.aspnetcore.nuspec",
+        "lib/netcoreapp3.0/jsreport.AspNetCore.dll",
+        "lib/netcoreapp3.0/jsreport.AspNetCore.xml",
+        "lib/netstandard2.0/jsreport.AspNetCore.dll",
+        "lib/netstandard2.0/jsreport.AspNetCore.xml"
+      ]
+    },
+    "jsreport.Binary/2.9.0": {
+      "sha512": "rkd+GwLNm/93no0qAOCOUkFWigZIM8mE+uRb+lLEbAxIDUm6JzjJp1iYI8WztiiQ66d0fyho9WnmSgQvIR65nQ==",
+      "type": "package",
+      "path": "jsreport.binary/2.9.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "jsreport.binary.2.9.0.nupkg.sha512",
+        "jsreport.binary.nuspec",
+        "lib/netstandard2.0/jsreport.Binary.dll"
+      ]
+    },
+    "jsreport.Client/3.1.0": {
+      "sha512": "9bXyuzq3d1iHvNGqlzXQGzgoEfzSyz4lexxD4m5kpEmfUD5d4+Uh0A54Sp0KkNDO6g1KzCMB6ouETIZDQtTj4g==",
+      "type": "package",
+      "path": "jsreport.client/3.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "jsreport.client.3.1.0.nupkg.sha512",
+        "jsreport.client.nuspec",
+        "lib/net45/jsreport.Client.dll",
+        "lib/netstandard2.0/jsreport.Client.dll"
+      ]
+    },
+    "jsreport.Local/2.3.0": {
+      "sha512": "BCzjtbDXkFTY5CwetUqVEOutdKjHKpajWTyQNZm1XGcV2QHJddcQzqJYo5LE4qXtG9zOAgA9V1bQGCF1uWC6Tg==",
+      "type": "package",
+      "path": "jsreport.local/2.3.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "jsreport.local.2.3.0.nupkg.sha512",
+        "jsreport.local.nuspec",
+        "lib/net45/jsreport.Local.dll",
+        "lib/net45/jsreport.Local.xml",
+        "lib/netstandard2.0/jsreport.Local.dll",
+        "lib/netstandard2.0/jsreport.Local.xml"
+      ]
+    },
+    "jsreport.Shared/2.3.0": {
+      "sha512": "8155XSfnpY41VKWEKjjks7PuprcE0AzyN2zqc+qnyIwRn5AKjnqW0/CmdabJfLgMYJ0q7DGBiKeaL2vvQB7YIw==",
+      "type": "package",
+      "path": "jsreport.shared/2.3.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "jsreport.shared.2.3.0.nupkg.sha512",
+        "jsreport.shared.nuspec",
+        "lib/net45/jsreport.Shared.dll",
+        "lib/net45/jsreport.Shared.xml",
+        "lib/netstandard2.0/jsreport.Shared.dll",
+        "lib/netstandard2.0/jsreport.Shared.xml"
+      ]
+    },
+    "jsreport.Types/2.7.0": {
+      "sha512": "TnIQjUGn0t9cXymILwft+NE60WrSnXX4vjOUg8SCpkG7foSVp/4dl8dmQXZcgVBMYUw4gOnHa2+IK/LlFvpZrg==",
+      "type": "package",
+      "path": "jsreport.types/2.7.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "jsreport.types.2.7.0.nupkg.sha512",
+        "jsreport.types.nuspec",
+        "lib/net45/jsreport.Types.dll",
+        "lib/net45/jsreport.Types.xml",
+        "lib/netstandard1.6/jsreport.Types.dll",
+        "lib/netstandard1.6/jsreport.Types.xml"
+      ]
+    },
     "Microsoft.AspNet.WebApi.Client/5.2.6": {
       "sha512": "owAlEIUZXWSnkK8Z1c+zR47A0X6ykF4XjbPok4lQKNuciUfHLGPd6QnI+rt/8KlQ17PmF+I4S3f+m+Qe4IvViw==",
       "type": "package",
@@ -4904,16 +5074,16 @@
         "microsoft.aspnetcore.html.abstractions.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.Http/2.2.0": {
-      "sha512": "YogBSMotWPAS/X5967pZ+yyWPQkThxhmzAwyCHCSSldzYBkW5W5d6oPfBaPqQOnSHYTpSOSOkpZoAce0vwb6+A==",
+    "Microsoft.AspNetCore.Http/2.2.2": {
+      "sha512": "BAibpoItxI5puk7YJbIGj95arZueM8B8M5xT1fXBn3hb3L2G3ucrZcYXv1gXdaroLbntUs8qeV8iuBrpjQsrKw==",
       "type": "package",
-      "path": "microsoft.aspnetcore.http/2.2.0",
+      "path": "microsoft.aspnetcore.http/2.2.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Microsoft.AspNetCore.Http.dll",
         "lib/netstandard2.0/Microsoft.AspNetCore.Http.xml",
-        "microsoft.aspnetcore.http.2.2.0.nupkg.sha512",
+        "microsoft.aspnetcore.http.2.2.2.nupkg.sha512",
         "microsoft.aspnetcore.http.nuspec"
       ]
     },
@@ -9311,10 +9481,10 @@
         "version.txt"
       ]
     },
-    "System.Net.Http/4.3.0": {
-      "sha512": "sYg+FtILtRQuYWSIAuNOELwVuVsxVyJGWQyOnlAzhV4xvhyFnON1bAzYYC+jjRW8JREM45R0R5Dgi8MTC5sEwA==",
+    "System.Net.Http/4.3.2": {
+      "sha512": "y7hv0o0weI0j0mvEcBOdt1F3CAADiWlcw3e54m8TfYiRmBPDIsHElx8QUPDlY4x6yWXKPGN0Z2TuXCTPgkm5WQ==",
       "type": "package",
-      "path": "system.net.http/4.3.0",
+      "path": "system.net.http/4.3.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -9336,49 +9506,9 @@
         "ref/monotouch10/_._",
         "ref/net45/_._",
         "ref/net46/System.Net.Http.dll",
-        "ref/net46/System.Net.Http.xml",
-        "ref/net46/de/System.Net.Http.xml",
-        "ref/net46/es/System.Net.Http.xml",
-        "ref/net46/fr/System.Net.Http.xml",
-        "ref/net46/it/System.Net.Http.xml",
-        "ref/net46/ja/System.Net.Http.xml",
-        "ref/net46/ko/System.Net.Http.xml",
-        "ref/net46/ru/System.Net.Http.xml",
-        "ref/net46/zh-hans/System.Net.Http.xml",
-        "ref/net46/zh-hant/System.Net.Http.xml",
         "ref/netcore50/System.Net.Http.dll",
-        "ref/netcore50/System.Net.Http.xml",
-        "ref/netcore50/de/System.Net.Http.xml",
-        "ref/netcore50/es/System.Net.Http.xml",
-        "ref/netcore50/fr/System.Net.Http.xml",
-        "ref/netcore50/it/System.Net.Http.xml",
-        "ref/netcore50/ja/System.Net.Http.xml",
-        "ref/netcore50/ko/System.Net.Http.xml",
-        "ref/netcore50/ru/System.Net.Http.xml",
-        "ref/netcore50/zh-hans/System.Net.Http.xml",
-        "ref/netcore50/zh-hant/System.Net.Http.xml",
         "ref/netstandard1.1/System.Net.Http.dll",
-        "ref/netstandard1.1/System.Net.Http.xml",
-        "ref/netstandard1.1/de/System.Net.Http.xml",
-        "ref/netstandard1.1/es/System.Net.Http.xml",
-        "ref/netstandard1.1/fr/System.Net.Http.xml",
-        "ref/netstandard1.1/it/System.Net.Http.xml",
-        "ref/netstandard1.1/ja/System.Net.Http.xml",
-        "ref/netstandard1.1/ko/System.Net.Http.xml",
-        "ref/netstandard1.1/ru/System.Net.Http.xml",
-        "ref/netstandard1.1/zh-hans/System.Net.Http.xml",
-        "ref/netstandard1.1/zh-hant/System.Net.Http.xml",
         "ref/netstandard1.3/System.Net.Http.dll",
-        "ref/netstandard1.3/System.Net.Http.xml",
-        "ref/netstandard1.3/de/System.Net.Http.xml",
-        "ref/netstandard1.3/es/System.Net.Http.xml",
-        "ref/netstandard1.3/fr/System.Net.Http.xml",
-        "ref/netstandard1.3/it/System.Net.Http.xml",
-        "ref/netstandard1.3/ja/System.Net.Http.xml",
-        "ref/netstandard1.3/ko/System.Net.Http.xml",
-        "ref/netstandard1.3/ru/System.Net.Http.xml",
-        "ref/netstandard1.3/zh-hans/System.Net.Http.xml",
-        "ref/netstandard1.3/zh-hant/System.Net.Http.xml",
         "ref/portable-net45+win8+wpa81/_._",
         "ref/win8/_._",
         "ref/wpa81/_._",
@@ -9389,7 +9519,7 @@
         "runtimes/win/lib/net46/System.Net.Http.dll",
         "runtimes/win/lib/netcore50/System.Net.Http.dll",
         "runtimes/win/lib/netstandard1.3/System.Net.Http.dll",
-        "system.net.http.4.3.0.nupkg.sha512",
+        "system.net.http.4.3.2.nupkg.sha512",
         "system.net.http.nuspec"
       ]
     },
@@ -12080,7 +12210,10 @@
       "Microsoft.AspNetCore.App >= 2.2.0",
       "Microsoft.AspNetCore.Razor.Design >= 2.2.0",
       "Microsoft.EntityFrameworkCore >= 2.2.2",
-      "Microsoft.NETCore.App >= 2.2.0"
+      "Microsoft.NETCore.App >= 2.2.0",
+      "jsreport.AspNetCore >= 2.1.0",
+      "jsreport.Binary >= 2.9.0",
+      "jsreport.Local >= 2.3.0"
     ]
   },
   "packageFolders": {
@@ -12144,6 +12277,18 @@
             "target": "Package",
             "version": "[2.2.0, )",
             "autoReferenced": true
+          },
+          "jsreport.AspNetCore": {
+            "target": "Package",
+            "version": "[2.1.0, )"
+          },
+          "jsreport.Binary": {
+            "target": "Package",
+            "version": "[2.9.0, )"
+          },
+          "jsreport.Local": {
+            "target": "Package",
+            "version": "[2.3.0, )"
           }
         },
         "imports": [

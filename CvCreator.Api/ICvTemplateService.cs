@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using CvCreator.Api.Model;
 
 namespace CvCreator.Api
@@ -6,5 +7,6 @@ namespace CvCreator.Api
     public interface ICvTemplateService
     {
         Task<bool> AddAsync(Template template, string authorName);
+        Task<Template> GetByIdAsync(Guid id);
     }
 }

@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using jsreport.AspNetCore;
+using jsreport.Binary;
+using jsreport.Local;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -65,6 +68,10 @@ namespace CvCreator.Api
             services.AddScoped<ICvTemplateRepository, CvTemplateRepository>();
             services.AddScoped<ICvTemplateService, CvTemplateService>();
 
+            services.AddJsReport(new LocalReporting()
+                .UseBinary(JsReportBinary.GetBinary())
+                .AsUtility()
+                .Create());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

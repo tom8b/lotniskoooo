@@ -1,4 +1,7 @@
 ﻿using CvCreator.Api.Model;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CvCreator.Api
@@ -16,18 +19,19 @@ namespace CvCreator.Api
         {
             await dbContext.AddAsync(item);
 
-            try
-            {
-                return await dbContext.SaveChangesAsync();
-
-            }
-            catch (System.Exception e)
-            {
-
-                System.Console.WriteLine(e.Message);
-                return 0;
-            }
+            return await dbContext.SaveChangesAsync();
         }
 
+        public async Task<CvTemplateModel> GetByIdAsync(Guid id)
+        {
+            return await dbContext.CvTemplateModel
+                .Include(x => x.Elements)
+                    .ThenInclude(x => x.Size)
+                .Include(x => x.Elements)
+                    .ThenInclude(x => x.Position)
+                .Include(x => x.Elements)
+                    .ThenInclude(x => x.Content)
+                .FirstOrDefaultAsync(x => x.Id.Equals(id));
+        }
     }
 }

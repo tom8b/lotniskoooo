@@ -26,5 +26,16 @@ namespace CvCreator.Api
 
             return await templateRepository.Add(entity) > 0 ? true : false;
         }
+
+        public async Task<Template> GetByIdAsync(Guid id)
+        {
+            var item = await templateRepository.GetByIdAsync(id);
+
+            return new Template
+            {
+                BackgroundUrl = item.BackgroundUrl,
+                Elements = item.Elements
+            };
+        }
     }
 }
