@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using CvCreator.Api.JsReport;
 using CvCreator.Api.Model;
 using jsreport.AspNetCore;
 using jsreport.Types;
@@ -36,14 +37,14 @@ namespace CvCreator.Api.Controllers
         {
             var imagePath = _hostingEnvironment.ContentRootPath + "\\" + "no-picture.jpg";
 
+            var ElemenetStyleBuilder = new ElementStyleBuilder(10, 300, 200, 200);
+            var style = ElemenetStyleBuilder.WithBackgroundColor("red").Build();
+            var element = new HtmlElement(style, "testowy tekst");
             var report = await jsReportMVCService.RenderAsync(new RenderRequest()
             {
                 Template = new jsreport.Types.Template
                 {
-                    Content = "<html> <h1 style = \"position: absolute; left: 10px; top: 300px; font-family: Impact, Charcoal, sans-serif;\"> Hello 3 </h1> " +
-                    "<h1 style = \"position: absolute; left: 0px; top: 0px;\"> Hello 2 </h1>" +
-                    "<h1 style = \"position: absolute; left: 150px; top: 75px;\"> Hello 1 </h1>" +
-                    $"<img src='{imagePath}' /></html>",
+                    Content = $"<html>{element.GetElement()}</html>",
                     Engine = Engine.None,
                     Recipe = Recipe.ChromePdf
                 }
@@ -56,7 +57,6 @@ namespace CvCreator.Api.Controllers
             }
             report.Content.Seek(0, SeekOrigin.Begin);
 
-
             return new string[] { "value1", "value2" };
         }
 
@@ -65,7 +65,14 @@ namespace CvCreator.Api.Controllers
         [HttpPost("template")]
         public async Task<ActionResult<Model.Template>> Get([FromBody] GetTemplateRequest request)
         {
-            return await cvTemplateService.GetByIdAsync(Guid.Parse(request.Id));
+            var result = await cvTemplateService.GetByIdAsync(Guid.Parse(request.Id));
+            return result;
+        }
+
+        [HttpPost("fillTemplate")]
+        public async Task<ActionResult<Model.Template>> Post([FromBody] FillTemplateRequest request)
+        {
+            return new Model.Template();
         }
 
         // POST api/values

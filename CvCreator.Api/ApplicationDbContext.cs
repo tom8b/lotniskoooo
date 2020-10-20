@@ -7,6 +7,7 @@ namespace CvCreator.Api
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<CvTemplateModel> CvTemplateModel { get; set; }
+        public DbSet<FilledTemplate> FilledTemplate { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {

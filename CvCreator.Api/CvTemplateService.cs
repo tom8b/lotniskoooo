@@ -33,6 +33,7 @@ namespace CvCreator.Api
 
             return new Template
             {
+                Id = item.Id,
                 BackgroundUrl = item.BackgroundUrl,
                 Elements = item.Elements
             };
