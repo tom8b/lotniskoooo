@@ -7,7 +7,7 @@ namespace CvCreator.Api.Model
     {
         public Guid Id { get; set; }
         public Guid TemplateId { get; set; }
-        public Guid UserId { get; set; }
-        public IEnumerable<FilledElement> FilledElements { get; set; }
+        public string UserId { get; set; }
+        public ICollection<FilledElement> FilledElements { get; set; }
     }
 }

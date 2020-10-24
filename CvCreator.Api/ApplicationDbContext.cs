@@ -9,6 +9,7 @@ namespace CvCreator.Api
         public DbSet<CvTemplateModel> CvTemplateModel { get; set; }
         public DbSet<FilledTemplate> FilledTemplate { get; set; }
 
+    
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
@@ -16,6 +17,12 @@ namespace CvCreator.Api
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.EnableSensitiveDataLogging();
+            // ...
         }
     }
 }

@@ -73,7 +73,7 @@ namespace CvCreator.Api.Controllers
             var userExists = await userManager.FindByNameAsync(model.Username);
             if (userExists != null)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
-
+            
             ApplicationUser user = new ApplicationUser()
             {
                 Email = model.Email,

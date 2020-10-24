@@ -33,5 +33,12 @@ namespace CvCreator.Api
                     .ThenInclude(x => x.Content)
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
         }
+
+        public async Task<int> FillTemplate(FilledTemplate item)
+        {
+            await dbContext.AddAsync(item);
+
+            return await dbContext.SaveChangesAsync();
+        }
     }
 }

@@ -8,5 +8,6 @@ namespace CvCreator.Api
     {
         Task<bool> AddAsync(Template template, string authorName);
         Task<Template> GetByIdAsync(Guid id);
+        Task<bool> FillTemplate(Template template, string username);
     }
 }

@@ -72,6 +72,9 @@ namespace CvCreator.Api.Controllers
         [HttpPost("fillTemplate")]
         public async Task<ActionResult<Model.Template>> Post([FromBody] FillTemplateRequest request)
         {
+            string username = User.Identity.Name;
+            await cvTemplateService.FillTemplate(new Model.Template { Elements = request.Elements, Id = request.Id }, username);
+
             return new Model.Template();
         }
 
