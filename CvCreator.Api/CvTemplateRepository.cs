@@ -40,5 +40,10 @@ namespace CvCreator.Api
 
             return await dbContext.SaveChangesAsync();
         }
+
+        public async Task<FilledTemplate> GetFilledTemplate(Guid id)
+        {
+            return await dbContext.FilledTemplate.Include(x => x.FilledElements).FirstOrDefaultAsync(x => x.Id.Equals(id));
+        }
     }
 }

@@ -14,9 +14,25 @@
             elementStyle.AddStyle("height", height);
         }
 
+        public ElementStyleBuilder(int xPosition, int yPosition, string width, string height)
+        {
+            elementStyle = new ElementStyle();
+            elementStyle.AddStyle("position", "absolute");
+            elementStyle.AddStyle("left", xPosition);
+            elementStyle.AddStyle("top", yPosition);
+            elementStyle.AddStyle("width", width);
+            elementStyle.AddStyle("height", height);
+        }
+
         public ElementStyleBuilder WithBackgroundColor(string color)
         {
             elementStyle.AddStyle("background-color", color);
+            return this;
+        }
+
+        public ElementStyleBuilder WithBackgroundImage(string path)
+        {
+            elementStyle.AddStyle("background-image", path);
             return this;
         }
 

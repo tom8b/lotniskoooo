@@ -9,5 +9,6 @@ namespace CvCreator.Api
         Task<int> Add(CvTemplateModel item);
         Task<CvTemplateModel> GetByIdAsync(Guid id);
         Task<int> FillTemplate(FilledTemplate item);
+        Task<FilledTemplate> GetFilledTemplate(Guid id);
     }
 }

@@ -35,16 +35,52 @@ namespace CvCreator.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<string>>> Get()
         {
-            var imagePath = _hostingEnvironment.ContentRootPath + "\\" + "no-picture.jpg";
+            #region working generating pdf
+            //var imagePath = _hostingEnvironment.ContentRootPath + "\\" + "no-picture.jpg";
 
-            var ElemenetStyleBuilder = new ElementStyleBuilder(10, 300, 200, 200);
-            var style = ElemenetStyleBuilder.WithBackgroundColor("red").Build();
-            var element = new HtmlElement(style, "testowy tekst");
+            //var ElemenetStyleBuilder = new ElementStyleBuilder(10, 300, 200, 200);
+            //var style = ElemenetStyleBuilder.WithBackgroundColor("red").Build();
+            //var element = new HtmlElement(style, "testowy tekst");
+            //var report = await jsReportMVCService.RenderAsync(new RenderRequest()
+            //{
+            //    Template = new jsreport.Types.Template
+            //    {
+            //        Content = $"<html>{element.GetElement()}</html>",
+            //        Engine = Engine.None,
+            //        Recipe = Recipe.ChromePdf
+            //    }
+            //});
+
+
+            //using (var file = System.IO.File.Open("report.pdf", FileMode.Create))
+            //{
+            //    report.Content.CopyTo(file);
+            //}
+            //report.Content.Seek(0, SeekOrigin.Begin);
+            #endregion
+
+
+
+            var template = await cvTemplateService.GetFilledTemplate(Guid.Parse("9c8eecb5-6c0b-4f16-c6e1-08d878197584"));
+
+            var content = string.Empty;
+
+            foreach (var element in template.Elements)
+            {
+                var ElemenetStyleBuilder = new ElementStyleBuilder(element.Position.X, element.Position.Y, element.Size.X, element.Size.Y);
+                var style = ElemenetStyleBuilder.WithBackgroundColor("red").Build();
+
+                var htmlElement = new HtmlElement(style, element.Content.Text);
+                content += htmlElement.GetElement();
+            }
+
+            var mainContent = $"<html><div style=\"background-image: url({ template.BackgroundUrl });\">{content}</div></html>";
+
             var report = await jsReportMVCService.RenderAsync(new RenderRequest()
             {
                 Template = new jsreport.Types.Template
                 {
-                    Content = $"<html>{element.GetElement()}</html>",
+                    Content = mainContent,
                     Engine = Engine.None,
                     Recipe = Recipe.ChromePdf
                 }
@@ -66,6 +102,13 @@ namespace CvCreator.Api.Controllers
         public async Task<ActionResult<Model.Template>> Get([FromBody] GetTemplateRequest request)
         {
             var result = await cvTemplateService.GetByIdAsync(Guid.Parse(request.Id));
+            return result;
+        }
+
+        [HttpPost("getFilledTemplate")]
+        public async Task<ActionResult<Model.Template>> GetFilledTemplate([FromBody] GetTemplateRequest request)
+        {
+            var result = await cvTemplateService.GetFilledTemplate(Guid.Parse(request.Id));
             return result;
         }
 

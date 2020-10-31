@@ -63,5 +63,30 @@ namespace CvCreator.Api
                 throw;
             }
         }
+
+        public async Task<Template> GetFilledTemplate(Guid filledTemplateId)
+        {
+            var filledTemplate = await templateRepository.GetFilledTemplate(filledTemplateId);
+            var template = await templateRepository.GetByIdAsync(filledTemplate.TemplateId);
+            var mappedFilledElements = filledTemplate.FilledElements.Select(x => new Element
+            {
+                Id = x.ElementId,
+                Content = new Content
+                {
+                    Text = x.FilledText
+                },
+                Position = template.Elements.FirstOrDefault(y => y.Id.Equals(x.ElementId)).Position,
+                Size = template.Elements.FirstOrDefault(y => y.Id.Equals(x.ElementId)).Size,
+                UserFillsOut = true
+            });
+            var elements = mappedFilledElements.Concat(template.Elements.Where(x => x.UserFillsOut == false));
+
+            return new Template
+            {
+                BackgroundUrl = template.BackgroundUrl,
+                Id = template.Id,
+                Elements = elements
+            };
+        }
     }
 }
