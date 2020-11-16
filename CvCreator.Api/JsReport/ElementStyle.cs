@@ -11,6 +11,12 @@ namespace CvCreator.Api.JsReport
             styles.Add(key, value);
         }
 
+        public void AddStyle(string key, double value)
+        {
+            styles.Add(key, value.ToString());
+        }
+
+
         public void AddStyle(string key, int value)
         {
             styles.Add(key, value.ToString());

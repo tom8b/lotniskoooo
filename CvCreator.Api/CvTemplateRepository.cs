@@ -15,11 +15,22 @@ namespace CvCreator.Api
             this.dbContext = dbContext;
         }
 
-        public async Task<int> Add(CvTemplateModel item)
+        public async Task<CvTemplateModel> Add(CvTemplateModel item)
         {
-            await dbContext.AddAsync(item);
+            try
+            {
+                var result = await dbContext.AddAsync(item);
 
-            return await dbContext.SaveChangesAsync();
+                await dbContext.SaveChangesAsync();
+
+                return result.Entity;
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+       
         }
 
         public async Task<CvTemplateModel> GetByIdAsync(Guid id)

@@ -9,7 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
+using System.IO;
 using System.Text;
 
 namespace CvCreator.Api
@@ -91,6 +93,12 @@ namespace CvCreator.Api
             app.UseAuthentication();
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+        Path.Combine(env.ContentRootPath, "StaticFiles")),
+                RequestPath = "/StaticFiles"
+            });
             app.UseMvc();
         }
     }

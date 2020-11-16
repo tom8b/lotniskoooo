@@ -18,7 +18,7 @@ namespace CvCreator.Api
             this.userManager = userManager;
         }
 
-        public async Task<bool> AddAsync(Template template, string authorName)
+        public async Task<CvTemplateModel> AddAsync(Template template, string authorName)
         {
             var entity = new CvTemplateModel
             {
@@ -27,7 +27,7 @@ namespace CvCreator.Api
                 Elements = template.Elements,
             };
 
-            return await templateRepository.Add(entity) > 0 ? true : false;
+            return await templateRepository.Add(entity);
         }
 
         public async Task<Template> GetByIdAsync(Guid id)

@@ -9,8 +9,10 @@ using jsreport.AspNetCore;
 using jsreport.Types;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace CvCreator.Api.Controllers
 {
@@ -35,33 +37,7 @@ namespace CvCreator.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<string>>> Get()
         {
-            #region working generating pdf
-            //var imagePath = _hostingEnvironment.ContentRootPath + "\\" + "no-picture.jpg";
-
-            //var ElemenetStyleBuilder = new ElementStyleBuilder(10, 300, 200, 200);
-            //var style = ElemenetStyleBuilder.WithBackgroundColor("red").Build();
-            //var element = new HtmlElement(style, "testowy tekst");
-            //var report = await jsReportMVCService.RenderAsync(new RenderRequest()
-            //{
-            //    Template = new jsreport.Types.Template
-            //    {
-            //        Content = $"<html>{element.GetElement()}</html>",
-            //        Engine = Engine.None,
-            //        Recipe = Recipe.ChromePdf
-            //    }
-            //});
-
-
-            //using (var file = System.IO.File.Open("report.pdf", FileMode.Create))
-            //{
-            //    report.Content.CopyTo(file);
-            //}
-            //report.Content.Seek(0, SeekOrigin.Begin);
-            #endregion
-
-
-
-            var template = await cvTemplateService.GetFilledTemplate(Guid.Parse("9c8eecb5-6c0b-4f16-c6e1-08d878197584"));
+            var template = await cvTemplateService.GetFilledTemplate(Guid.Parse("ddf84c9e-7666-4b05-ea64-08d8803a1df7"));
 
             var content = string.Empty;
 
@@ -73,8 +49,9 @@ namespace CvCreator.Api.Controllers
                 var htmlElement = new HtmlElement(style, element.Content.Text);
                 content += htmlElement.GetElement();
             }
-
-            var mainContent = $"<html><div style=\"background-image: url({ template.BackgroundUrl });\">{content}</div></html>";
+            string uploads = Path.Combine(_hostingEnvironment.ContentRootPath.Replace("\\", "/"), "StaticFiles");
+            //var mainContent = $"<img width=595 height=842 src=\"file:///{uploads}/837e7244-857e-4ade-d4e8-08d880388689/TLO_CV.jpg\" /><div>{content}</div>";
+            var mainContent = $"<img style=\"position: absolute; top: 0; left: 0; padding: 0; margin-top: 0; vertical-align: middle \" width=594 height=840 src=\"file:///{uploads}/9b7588a1-e7e7-4a43-cd05-08d87e93d78d/TLO_CV.jpg\" /><div>{content}</div>";
 
             var report = await jsReportMVCService.RenderAsync(new RenderRequest()
             {
@@ -82,7 +59,15 @@ namespace CvCreator.Api.Controllers
                 {
                     Content = mainContent,
                     Engine = Engine.None,
-                    Recipe = Recipe.ChromePdf
+                    Recipe = Recipe.ChromePdf,
+                    Chrome = new Chrome
+                    {
+                        Width="595", Height="842",
+                        MarginRight="0px",
+                        MarginLeft="0px",
+                        MarginTop="0px",
+                        MarginBottom="0px"                     
+                    }
                 }
             });
 
@@ -102,6 +87,7 @@ namespace CvCreator.Api.Controllers
         public async Task<ActionResult<Model.Template>> Get([FromBody] GetTemplateRequest request)
         {
             var result = await cvTemplateService.GetByIdAsync(Guid.Parse(request.Id));
+            result.BackgroundUrl = "https://localhost:44371/StaticFiles/" + result.Id.ToString() + "/backgroundImage.jpg";
             return result;
         }
 
@@ -127,6 +113,39 @@ namespace CvCreator.Api.Controllers
         {
             string authorName = User.Identity.Name;
             await cvTemplateService.AddAsync(request.Template, authorName);
+        }
+
+        [HttpPost("file")]
+        public async Task PostImages([FromForm]IFormCollection form)
+        {
+            foreach (var item in form.Files)
+            {
+            string authorName = User.Identity.Name;
+
+            }
+            var request = form["request"].ToString();
+            CreateTemplateRequest obj;
+            try
+            {
+                 obj = JsonConvert.DeserializeObject<CreateTemplateRequest>(request);
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+         
+          
+            var entity = await cvTemplateService.AddAsync(obj.Template, User.Identity.Name);
+
+            string uploads = Path.Combine(_hostingEnvironment.ContentRootPath, "StaticFiles");
+            string folderPath = Path.Combine(uploads, entity.Id.ToString());
+            string filePath = Path.Combine(folderPath, "backgroundImage.jpg");
+            Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+            using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await form.Files["backgroundImage"].CopyToAsync(fileStream);
+            }
         }
 
         // PUT api/values/5

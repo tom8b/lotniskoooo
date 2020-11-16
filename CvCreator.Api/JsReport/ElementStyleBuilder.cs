@@ -14,6 +14,16 @@
             elementStyle.AddStyle("height", height);
         }
 
+        public ElementStyleBuilder(double xPosition, double yPosition, string width, string height)
+        {
+            elementStyle = new ElementStyle();
+            elementStyle.AddStyle("position", "absolute");
+            elementStyle.AddStyle("left", xPosition);
+            elementStyle.AddStyle("top", yPosition);
+            elementStyle.AddStyle("width", width);
+            elementStyle.AddStyle("height", height);
+        }
+
         public ElementStyleBuilder(int xPosition, int yPosition, string width, string height)
         {
             elementStyle = new ElementStyle();
