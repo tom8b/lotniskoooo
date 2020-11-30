@@ -5,6 +5,7 @@ namespace CvCreator.Api.Model
     public class Element
     {
         public Guid Id { get; set; }
+        public int ElementKey { get; set; }
         public Position Position { get; set; }
         public Size Size { get; set; }
         public Content Content { get; set; }

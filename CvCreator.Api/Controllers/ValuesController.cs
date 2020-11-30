@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using CvCreator.Api.JsReport;
@@ -84,10 +85,29 @@ namespace CvCreator.Api.Controllers
        // [Authorize]
         // GET api/values/template
         [HttpPost("template")]
-        public async Task<ActionResult<Model.Template>> Get([FromBody] GetTemplateRequest request)
+        public async Task<ActionResult<GetTemplateResult>> Get([FromBody] GetTemplateRequest request)
         {
-            var result = await cvTemplateService.GetByIdAsync(Guid.Parse(request.Id));
-            result.BackgroundUrl = "https://localhost:44371/StaticFiles/" + result.Id.ToString() + "/backgroundImage.jpg";
+            var template = await cvTemplateService.GetByIdAsync(Guid.Parse(request.Id));
+            var result = new GetTemplateResult();
+            result.BackgroundUrl = "https://localhost:44371/StaticFiles/" + template.Id.ToString() + "/backgroundImage.jpg";
+            result.Elements = new List<ElementWithImg>();
+            foreach(var element in template.Elements)
+            {
+                var elementWithImg = new ElementWithImg();
+                elementWithImg.Content = element.Content;
+                elementWithImg.ElementKey = element.ElementKey;
+                elementWithImg.Id = element.Id;
+                elementWithImg.Image = "https://localhost:44371/StaticFiles/" + template.Id.ToString() + "/" + element.Id + ".jpg";
+                elementWithImg.Position = element.Position;
+                elementWithImg.Size = element.Size;
+                elementWithImg.UserFillsOut = element.UserFillsOut;
+            
+                result.Elements.Add(elementWithImg);
+              
+           
+            }
+
+            result.Id = template.Id;
             return result;
         }
 
@@ -118,12 +138,8 @@ namespace CvCreator.Api.Controllers
         [HttpPost("file")]
         public async Task PostImages([FromForm]IFormCollection form)
         {
-            foreach (var item in form.Files)
-            {
-            string authorName = User.Identity.Name;
-
-            }
             var request = form["request"].ToString();
+
             CreateTemplateRequest obj;
             try
             {
@@ -135,16 +151,28 @@ namespace CvCreator.Api.Controllers
                 throw;
             }
          
-          
             var entity = await cvTemplateService.AddAsync(obj.Template, User.Identity.Name);
 
             string uploads = Path.Combine(_hostingEnvironment.ContentRootPath, "StaticFiles");
             string folderPath = Path.Combine(uploads, entity.Id.ToString());
-            string filePath = Path.Combine(folderPath, "backgroundImage.jpg");
-            Directory.CreateDirectory(Path.GetDirectoryName(filePath));
-            using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+            string backgroundPath = Path.Combine(folderPath, "backgroundImage.jpg");
+            Directory.CreateDirectory(Path.GetDirectoryName(backgroundPath));
+
+            var keys = form.Files.Select(x => x.Name).Where(x => x != "backgroundImage");
+
+
+            using (Stream fileStream = new FileStream(backgroundPath, FileMode.Create))
             {
                 await form.Files["backgroundImage"].CopyToAsync(fileStream);
+            }
+
+            foreach (var picture in keys)
+            {
+                var imagePath = Path.Combine(folderPath, $"{entity.Elements.First(x => x.ElementKey.ToString().Equals(picture)).Id}.jpg");
+                using (Stream fileStream = new FileStream(imagePath, FileMode.Create))
+                {
+                    await form.Files[picture].CopyToAsync(fileStream);
+                }
             }
         }
 
