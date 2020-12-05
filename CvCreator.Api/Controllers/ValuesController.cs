@@ -38,24 +38,24 @@ namespace CvCreator.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<string>>> Get()
         {
-            var filledTemplateId = Guid.Parse("7b572e42-92cd-4ecb-bf3f-08d8990ba1ab");
-            var templateId = Guid.Parse("16fd18ec-8af9-420f-8303-08d896182669");
+            var filledTemplateId = Guid.Parse("64b573ff-7526-49ae-8ee8-08d8993d37fa");
+            var templateId = Guid.Parse("0bc6ba07-d534-4d2c-4bc2-08d8993c918f");
 
             var template = await cvTemplateService.GetFilledTemplate(filledTemplateId);
 
             var content = string.Empty;
+            string uploads = Path.Combine(_hostingEnvironment.ContentRootPath.Replace("\\", "/"), "StaticFiles");
 
             foreach (var element in template.Elements)
             {
                 var ElemenetStyleBuilder = new ElementStyleBuilder(element.Position.X, element.Position.Y, element.Size.X, element.Size.Y);
-                var style = ElemenetStyleBuilder.WithBackgroundColor("red").Build();
-
-                var htmlElement = new HtmlElement(style, element.Content.Text);
+                var style = ElemenetStyleBuilder.WithZIndex(2).WithBackgroundColor("red").Build();
+                var imagePath = $"file:///{uploads}/{templateId}/{element.Id}.jpg";
+                var htmlElement = new HtmlElement(style, element.Content.Text, imagePath);
                 content += htmlElement.GetElement();
             }
-            string uploads = Path.Combine(_hostingEnvironment.ContentRootPath.Replace("\\", "/"), "StaticFiles");
-            //var mainContent = $"<img width=595 height=842 src=\"file:///{uploads}/837e7244-857e-4ade-d4e8-08d880388689/TLO_CV.jpg\" /><div>{content}</div>";
-            var mainContent = $"<img style=\"position: absolute; top: 0; left: 0; padding: 0; margin-top: 0; vertical-align: middle \" width=594 height=840 src=\"file:///{uploads}/{templateId}/backgroundImage.jpg\" /><div>{content}</div>";
+
+            var mainContent = $"<img style=\"; position: absolute; top: 0; left: 0; padding: 0; margin-top: 0; vertical-align: middle \" width=594 height=840 src=\"file:///{uploads}/{templateId}/backgroundImage.jpg\" /><div>{content}</div>";
             Report report;
             try
             {

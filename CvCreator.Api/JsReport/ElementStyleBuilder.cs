@@ -40,6 +40,13 @@
             return this;
         }
 
+
+        public ElementStyleBuilder WithZIndex(int zIndex)
+        {
+            elementStyle.AddStyle("z-index", zIndex);
+            return this;
+        }
+
         public ElementStyleBuilder WithBackgroundImage(string path)
         {
             elementStyle.AddStyle("background-image", path);
