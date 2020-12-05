@@ -38,7 +38,10 @@ namespace CvCreator.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<string>>> Get()
         {
-            var template = await cvTemplateService.GetFilledTemplate(Guid.Parse("ddf84c9e-7666-4b05-ea64-08d8803a1df7"));
+            var filledTemplateId = Guid.Parse("7b572e42-92cd-4ecb-bf3f-08d8990ba1ab");
+            var templateId = Guid.Parse("16fd18ec-8af9-420f-8303-08d896182669");
+
+            var template = await cvTemplateService.GetFilledTemplate(filledTemplateId);
 
             var content = string.Empty;
 
@@ -52,25 +55,36 @@ namespace CvCreator.Api.Controllers
             }
             string uploads = Path.Combine(_hostingEnvironment.ContentRootPath.Replace("\\", "/"), "StaticFiles");
             //var mainContent = $"<img width=595 height=842 src=\"file:///{uploads}/837e7244-857e-4ade-d4e8-08d880388689/TLO_CV.jpg\" /><div>{content}</div>";
-            var mainContent = $"<img style=\"position: absolute; top: 0; left: 0; padding: 0; margin-top: 0; vertical-align: middle \" width=594 height=840 src=\"file:///{uploads}/9b7588a1-e7e7-4a43-cd05-08d87e93d78d/TLO_CV.jpg\" /><div>{content}</div>";
-
-            var report = await jsReportMVCService.RenderAsync(new RenderRequest()
+            var mainContent = $"<img style=\"position: absolute; top: 0; left: 0; padding: 0; margin-top: 0; vertical-align: middle \" width=594 height=840 src=\"file:///{uploads}/{templateId}/backgroundImage.jpg\" /><div>{content}</div>";
+            Report report;
+            try
             {
-                Template = new jsreport.Types.Template
+                report = await jsReportMVCService.RenderAsync(new RenderRequest()
                 {
-                    Content = mainContent,
-                    Engine = Engine.None,
-                    Recipe = Recipe.ChromePdf,
-                    Chrome = new Chrome
+                    Template = new jsreport.Types.Template
                     {
-                        Width="595", Height="842",
-                        MarginRight="0px",
-                        MarginLeft="0px",
-                        MarginTop="0px",
-                        MarginBottom="0px"                     
+                        Content = mainContent,
+                        Engine = Engine.None,
+                        Recipe = Recipe.ChromePdf,
+                        Chrome = new Chrome
+                        {
+                            Width = "595",
+                            Height = "842",
+                            MarginRight = "0px",
+                            MarginLeft = "0px",
+                            MarginTop = "0px",
+                            MarginBottom = "0px"
+                        }
                     }
-                }
-            });
+                });
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+
+          
 
 
             using (var file = System.IO.File.Open("report.pdf", FileMode.Create))
