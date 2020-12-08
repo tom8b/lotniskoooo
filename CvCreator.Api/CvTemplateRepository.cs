@@ -1,6 +1,8 @@
 ﻿using CvCreator.Api.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -45,11 +47,23 @@ namespace CvCreator.Api
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
         }
 
-        public async Task<int> FillTemplate(FilledTemplate item)
+        public IEnumerable<Guid> GetIds()
         {
-            await dbContext.AddAsync(item);
+            return dbContext.CvTemplateModel.Select(x => x.Id);
+        }
 
-            return await dbContext.SaveChangesAsync();
+        public IEnumerable<Guid> GetFilledTemplateIds(string authorName)
+        {
+            return dbContext.FilledTemplate.Where(x => x.UserId.Equals(authorName)).Select(x => x.Id);
+        }
+
+        public async Task<Guid> FillTemplate(FilledTemplate item)
+        {
+            var entity = await dbContext.AddAsync(item);
+
+            await dbContext.SaveChangesAsync();
+
+            return entity.Entity.Id;
         }
 
         public async Task<FilledTemplate> GetFilledTemplate(Guid id)

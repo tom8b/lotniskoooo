@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CvCreator.Api.Model;
 
@@ -8,7 +9,9 @@ namespace CvCreator.Api
     {
         Task<CvTemplateModel> AddAsync(Template template, string authorName);
         Task<Template> GetByIdAsync(Guid id);
-        Task<bool> FillTemplate(Template template, string username);
-        Task<Template> GetFilledTemplate(Guid filledTemplateId);
+        Task<Guid> FillTemplate(Template template, string username);
+        Task<(Template, Guid)> GetFilledTemplate(Guid filledTemplateId);
+        IEnumerable<Guid> GetIds();
+        IEnumerable<Guid> GetFilledTemplateIds(string authorName);
     }
 }

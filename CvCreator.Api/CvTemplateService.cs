@@ -42,7 +42,17 @@ namespace CvCreator.Api
             };
         }
 
-        public async Task<bool> FillTemplate(Template template, string username)
+        public IEnumerable<Guid> GetIds()
+        {
+            return templateRepository.GetIds();
+        }
+
+        public IEnumerable<Guid> GetFilledTemplateIds(string authorName)
+        {
+            return templateRepository.GetFilledTemplateIds(authorName);
+        }
+
+        public async Task<Guid> FillTemplate(Template template, string username)
         {
             var entity = new FilledTemplate
             {
@@ -54,7 +64,8 @@ namespace CvCreator.Api
             };
             try
             {
-                return await templateRepository.FillTemplate(entity) > 0 ? true : false;
+                var filledTemplateId = await templateRepository.FillTemplate(entity);
+                return filledTemplateId;
 
             }
             catch (Exception e)
@@ -64,7 +75,8 @@ namespace CvCreator.Api
             }
         }
 
-        public async Task<Template> GetFilledTemplate(Guid filledTemplateId)
+        //zwraca template i guida TemplateId!
+        public async Task<(Template, Guid)> GetFilledTemplate(Guid filledTemplateId)
         {
             var filledTemplate = await templateRepository.GetFilledTemplate(filledTemplateId);
             var template = await templateRepository.GetByIdAsync(filledTemplate.TemplateId);
@@ -81,12 +93,12 @@ namespace CvCreator.Api
             });
             var elements = mappedFilledElements.Concat(template.Elements.Where(x => x.UserFillsOut == false));
 
-            return new Template
+            return (new Template
             {
                 BackgroundUrl = template.BackgroundUrl,
-                Id = template.Id,
+                Id = filledTemplate.Id,
                 Elements = elements
-            };
+            }, filledTemplate.TemplateId);
         }
     }
 }
