@@ -13,5 +13,9 @@ namespace CvCreator.Api
         Task<FilledTemplate> GetFilledTemplate(Guid id);
         IEnumerable<Guid> GetIds();
         IEnumerable<Guid> GetFilledTemplateIds(string authorName);
+        Task<UserRatesTemplate> GetUserRate(Guid templateId, string username);
+        Task AddUserRate(Guid templateId, string username, int rate);
+        Task UpdateUserRate(UserRatesTemplate userRatesTemplate);
+        IEnumerable<Guid> GetUserRatesIds(string username);
     }
 }

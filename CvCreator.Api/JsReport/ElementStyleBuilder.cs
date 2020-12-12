@@ -47,6 +47,12 @@
             return this;
         }
 
+        public ElementStyleBuilder WithFontSize(string fontSize)
+        {
+            elementStyle.AddStyle("font-size", fontSize);
+            return this;
+        }
+
         public ElementStyleBuilder WithBackgroundImage(string path)
         {
             elementStyle.AddStyle("background-image", path);

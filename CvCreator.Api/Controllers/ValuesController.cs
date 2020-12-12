@@ -37,62 +37,7 @@ namespace CvCreator.Api.Controllers
         // GET api/values
         [HttpGet]
         public async Task<ActionResult<IEnumerable<string>>> Get()
-        {
-            //var filledTemplateId = Guid.Parse("e46ae089-1f1b-4c40-da70-08d89ad707c3");
-
-            //var (template, templateId) = await cvTemplateService.GetFilledTemplate(filledTemplateId);
-
-            //var content = string.Empty;
-            //string uploads = Path.Combine(_hostingEnvironment.ContentRootPath.Replace("\\", "/"), "StaticFiles");
-
-            //foreach (var element in template.Elements)
-            //{
-            //    var ElemenetStyleBuilder = new ElementStyleBuilder(element.Position.X, element.Position.Y, element.Size.X, element.Size.Y);
-            //    var style = ElemenetStyleBuilder.WithZIndex(2).WithBackgroundColor("red").Build();
-            //    var imagePath = $"file:///{uploads}/{templateId}/{element.Id}.jpg";
-            //    var htmlElement = new HtmlElement(style, element.Content.Text, imagePath);
-            //    content += htmlElement.GetElement();
-            //}
-
-            //var mainContent = $"<img style=\"; position: absolute; top: 0; left: 0; padding: 0; margin-top: 0; vertical-align: middle \" width=594 height=840 src=\"file:///{uploads}/{templateId}/backgroundImage.jpg\" /><div>{content}</div>";
-            //Report report;
-            //try
-            //{
-            //    report = await jsReportMVCService.RenderAsync(new RenderRequest()
-            //    {
-            //        Template = new jsreport.Types.Template
-            //        {
-            //            Content = mainContent,
-            //            Engine = Engine.None,
-            //            Recipe = Recipe.ChromePdf,
-            //            Chrome = new Chrome
-            //            {
-            //                Width = "595",
-            //                Height = "842",
-            //                MarginRight = "0px",
-            //                MarginLeft = "0px",
-            //                MarginTop = "0px",
-            //                MarginBottom = "0px"
-            //            }
-            //        }
-            //    });
-            //}
-            //catch (Exception e)
-            //{
-
-            //    throw;
-            //}
-
-            //string pdfPath = Path.Combine(_hostingEnvironment.ContentRootPath, "StaticFiles", "GeneratedPdfs", template.Id.ToString());
-            //string backgroundPath = Path.Combine(pdfPath, "cv.pdf");
-            //Directory.CreateDirectory(Path.GetDirectoryName(backgroundPath));
-
-            //using (var file = System.IO.File.Open(backgroundPath, FileMode.Create))
-            //{
-            //    report.Content.CopyTo(file);
-            //}
-            //report.Content.Seek(0, SeekOrigin.Begin);
-
+        {     
             return new string[] { "value1", "value2" };
         }
 
@@ -107,13 +52,13 @@ namespace CvCreator.Api.Controllers
             foreach (var element in template.Elements)
             {
                 var ElemenetStyleBuilder = new ElementStyleBuilder(element.Position.X, element.Position.Y, element.Size.X, element.Size.Y);
-                var style = ElemenetStyleBuilder.WithZIndex(2).WithBackgroundColor("red").Build();
+                var style = ElemenetStyleBuilder.WithZIndex(element.Content.ZIndex).WithFontSize(element.Content.FontSize).WithBackgroundColor("red").Build();
                 var imagePath = $"file:///{uploads}/{templateId}/{element.Id}.jpg";
-                var htmlElement = new HtmlElement(style, element.Content.Text, imagePath);
+                var htmlElement = new HtmlElement(style, element.Content.Text, imagePath, element.Content.ZIndex);
                 content += htmlElement.GetElement();
             }
 
-            var mainContent = $"<img style=\"; position: absolute; top: 0; left: 0; padding: 0; margin-top: 0; vertical-align: middle \" width=594 height=840 src=\"file:///{uploads}/{templateId}/backgroundImage.jpg\" /><div>{content}</div>";
+            var mainContent = $"<img alt=\"\" style=\"; position: absolute; top: 0; left: 0; padding: 0; margin-top: 0; vertical-align: middle \" width=594 height=840 src=\"file:///{uploads}/{templateId}/backgroundImage.jpg\" /><div>{content}</div>";
             Report report;
             try
             {
@@ -160,6 +105,13 @@ namespace CvCreator.Api.Controllers
             return new GetAllTemplatesResult { Ids = cvTemplateService.GetIds() };
         }
 
+        [HttpGet("getAllNotRatedTemplates")]
+        public ActionResult<GetAllTemplatesResult> GetAllNotRatedTemplates()
+        {
+            string username = User.Identity.Name;
+            return new GetAllTemplatesResult { Ids = cvTemplateService.GetIdsNotRatedBy(username) };
+        }
+
         [HttpGet("getAllFilledTemplates")]
         public ActionResult<GetAllTemplatesResult> GetAllFilledTemplates()
         {
@@ -190,8 +142,6 @@ namespace CvCreator.Api.Controllers
                 elementWithImg.UserFillsOut = element.UserFillsOut;
             
                 result.Elements.Add(elementWithImg);
-              
-           
             }
 
             result.Id = template.Id;
@@ -211,6 +161,15 @@ namespace CvCreator.Api.Controllers
             string username = User.Identity.Name;
             var filledTemplateId = await cvTemplateService.FillTemplate(new Model.Template { Elements = request.Elements, Id = request.Id }, username);
             await GeneratePdfAsync(filledTemplateId).ConfigureAwait(false);
+
+            return new Model.Template();
+        }
+
+        [HttpPost("rateTemplate")]
+        public async Task<ActionResult<Model.Template>> RateTemplate([FromBody] RateTemplateRequest request)
+        {
+            string username = User.Identity.Name;
+            await cvTemplateService.RateTemplate(request.Id, username, request.Ocena);
 
             return new Model.Template();
         }
@@ -248,13 +207,6 @@ namespace CvCreator.Api.Controllers
 
             if (form.Files["backgroundImage"] != null)
             {
-      
-     
-          
-
-             
-
-
                 using (Stream fileStream = new FileStream(backgroundPath, FileMode.Create))
                 {
                     await form.Files["backgroundImage"].CopyToAsync(fileStream);
@@ -276,8 +228,7 @@ namespace CvCreator.Api.Controllers
                 {
 
                     throw;
-                }
-                
+                } 
             }
         }
 

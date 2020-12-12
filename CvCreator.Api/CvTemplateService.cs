@@ -47,6 +47,14 @@ namespace CvCreator.Api
             return templateRepository.GetIds();
         }
 
+        public IEnumerable<Guid> GetIdsNotRatedBy(string username)
+        {
+            var allIds = templateRepository.GetIds();
+            var userRates = templateRepository.GetUserRatesIds(username);
+
+            return allIds.Where(x => !userRates.Contains(x));
+        }
+
         public IEnumerable<Guid> GetFilledTemplateIds(string authorName)
         {
             return templateRepository.GetFilledTemplateIds(authorName);
@@ -75,6 +83,31 @@ namespace CvCreator.Api
             }
         }
 
+        public async Task RateTemplate(Guid templateId, string username, int rate)
+        {
+            int rateChecked;
+            if (rate == 0)
+            {
+                rateChecked = 0;
+            }
+            else
+            {
+                rateChecked = 1;
+            }
+
+            var userRatesTemplate = await templateRepository.GetUserRate(templateId, username);
+
+            if(userRatesTemplate == null)
+            {
+                await templateRepository.AddUserRate(templateId, username, rate);
+            }
+            else
+            {
+                userRatesTemplate.Rate = rateChecked;
+                await templateRepository.UpdateUserRate(userRatesTemplate);
+            }
+        }
+
         //zwraca template i guida TemplateId!
         public async Task<(Template, Guid)> GetFilledTemplate(Guid filledTemplateId)
         {
@@ -85,7 +118,9 @@ namespace CvCreator.Api
                 Id = x.ElementId,
                 Content = new Content
                 {
-                    Text = x.FilledText
+                    Text = x.FilledText,
+                    FontSize = template.Elements.FirstOrDefault(y => y.Id.Equals(x.ElementId)).Content.FontSize,
+                    ZIndex = template.Elements.FirstOrDefault(y => y.Id.Equals(x.ElementId)).Content.ZIndex
                 },
                 Position = template.Elements.FirstOrDefault(y => y.Id.Equals(x.ElementId)).Position,
                 Size = template.Elements.FirstOrDefault(y => y.Id.Equals(x.ElementId)).Size,

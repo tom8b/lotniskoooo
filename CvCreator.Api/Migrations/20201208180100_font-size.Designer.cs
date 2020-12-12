@@ -4,14 +4,16 @@ using CvCreator.Api;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CvCreator.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201208180100_font-size")]
+    partial class fontsize
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,8 +80,6 @@ namespace CvCreator.Api.Migrations
                     b.Property<string>("FontSize");
 
                     b.Property<string>("Text");
-
-                    b.Property<int>("ZIndex");
 
                     b.HasKey("Id");
 
@@ -188,22 +188,6 @@ namespace CvCreator.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Size");
-                });
-
-            modelBuilder.Entity("CvCreator.Api.Model.UserRatesTemplate", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("Rate");
-
-                    b.Property<Guid>("TemplateId");
-
-                    b.Property<string>("Username");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserRatesTemplate");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

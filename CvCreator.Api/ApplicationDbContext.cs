@@ -8,8 +8,8 @@ namespace CvCreator.Api
     {
         public DbSet<CvTemplateModel> CvTemplateModel { get; set; }
         public DbSet<FilledTemplate> FilledTemplate { get; set; }
+        public DbSet<UserRatesTemplate> UserRatesTemplate { get; set; }
 
-    
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 

@@ -16,6 +16,8 @@ namespace CvCreator.Api.Model
     {
         public Guid Id { get; set; }
         public string Text { get; set; }
+        public string FontSize { get; set; }
+        public int ZIndex { get; set; }
     }
 
     public class Size

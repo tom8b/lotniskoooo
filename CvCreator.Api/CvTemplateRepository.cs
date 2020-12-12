@@ -70,5 +70,27 @@ namespace CvCreator.Api
         {
             return await dbContext.FilledTemplate.Include(x => x.FilledElements).FirstOrDefaultAsync(x => x.Id.Equals(id));
         }
+
+        public async Task<UserRatesTemplate> GetUserRate(Guid templateId, string username)
+        {
+            return await dbContext.UserRatesTemplate.FirstOrDefaultAsync(x => x.TemplateId.Equals(templateId) && x.Username.Equals(username));
+        }
+
+        public IEnumerable<Guid> GetUserRatesIds(string username)
+        {
+            return dbContext.UserRatesTemplate.Where(x => x.Username.Equals(username)).Select(x => x.TemplateId);
+        }
+
+        public async Task AddUserRate(Guid templateId, string username, int rate)
+        {
+            await dbContext.AddAsync(new UserRatesTemplate { Rate = rate, TemplateId = templateId, Username = username });
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateUserRate(UserRatesTemplate userRatesTemplate)
+        {
+            dbContext.Update(userRatesTemplate);
+            await dbContext.SaveChangesAsync();
+        }
     }
 }
