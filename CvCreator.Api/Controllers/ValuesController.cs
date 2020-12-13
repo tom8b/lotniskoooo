@@ -49,14 +49,14 @@ namespace CvCreator.Api.Controllers
             var content = string.Empty;
             string uploads = Path.Combine(_hostingEnvironment.ContentRootPath.Replace("\\", "/"), "StaticFiles");
 
-            foreach (var element in template.Elements)
+            foreach (var element in template.Elements.OrderBy(x => x.Content.ZIndex))
             {
                 var ElemenetStyleBuilder = new ElementStyleBuilder(element.Position.X, element.Position.Y, element.Size.X, element.Size.Y);
-                var style = ElemenetStyleBuilder.WithZIndex(element.Content.ZIndex).WithFontSize(element.Content.FontSize).WithBackgroundColor("red").Build();
-                var imagePath = $"file:///{uploads}/{templateId}/{element.Id}.jpg";
-                var htmlElement = new HtmlElement(style, element.Content.Text, imagePath, element.Content.ZIndex);
+                var style = ElemenetStyleBuilder.WithZIndex(0).WithFontSize(element.Content.FontSize).WithBackgroundColor("red").Build();
+                var imagePath = element.IsProfilePicture ? $"file:///{uploads}/FilledTemplate/{filledTemplateId.ToString()}/profilePicture.jpg" :  $"file:///{uploads}/{templateId}/{element.Id}.jpg";
+                var htmlElement = new HtmlElement(style, element.Content.Text, imagePath, 0);
                 content += htmlElement.GetElement();
-            }
+            } 
 
             var mainContent = $"<img alt=\"\" style=\"; position: absolute; top: 0; left: 0; padding: 0; margin-top: 0; vertical-align: middle \" width=594 height=840 src=\"file:///{uploads}/{templateId}/backgroundImage.jpg\" /><div>{content}</div>";
             Report report;
@@ -100,9 +100,17 @@ namespace CvCreator.Api.Controllers
 
 
         [HttpGet("getAllTemplates")]
-        public ActionResult<GetAllTemplatesResult> GetAllTemplates()
+        public ActionResult<GetAllTemplatesWithRatesResult> GetAllTemplates()
         {
-            return new GetAllTemplatesResult { Ids = cvTemplateService.GetIds() };
+            var result = new GetAllTemplatesWithRatesResult { Ids = new List<SingleTemplate>() };
+            var ids = cvTemplateService.GetIds();
+            foreach(var id in ids)
+            {
+                (var rate, var count) = cvTemplateService.GetRatesFor(id);
+                result.Ids.Add(new SingleTemplate { Id = id, Rate = rate, RatesCount = count });
+            }
+
+            return result;
         }
 
         [HttpGet("getAllNotRatedTemplates")]
@@ -110,6 +118,20 @@ namespace CvCreator.Api.Controllers
         {
             string username = User.Identity.Name;
             return new GetAllTemplatesResult { Ids = cvTemplateService.GetIdsNotRatedBy(username) };
+        }
+
+        [HttpPost("getAuthorRanking")]
+        public ActionResult<GetAuthorsRankingResult> GetAuthorRanking()
+        {
+            var authorsWithRanking = cvTemplateService.GetAuthorsRanking();
+            var result = new GetAuthorsRankingResult() { AuthorWithRates = new List<AuthorWithRates>()} ;
+
+            foreach(var x in authorsWithRanking)
+            {
+                result.AuthorWithRates.Add(new AuthorWithRates { Author = x.Key, Rate = x.Value });
+            }
+
+            return result;
         }
 
         [HttpGet("getAllFilledTemplates")]
@@ -140,6 +162,7 @@ namespace CvCreator.Api.Controllers
                 elementWithImg.Position = element.Position;
                 elementWithImg.Size = element.Size;
                 elementWithImg.UserFillsOut = element.UserFillsOut;
+                elementWithImg.IsProfilePicture = element.IsProfilePicture;
             
                 result.Elements.Add(elementWithImg);
             }
@@ -156,10 +179,33 @@ namespace CvCreator.Api.Controllers
         }
 
         [HttpPost("fillTemplate")]
-        public async Task<ActionResult<Model.Template>> Post([FromBody] FillTemplateRequest request)
+        public async Task<ActionResult<Model.Template>> Post([FromForm]IFormCollection form)
         {
+            var request = form["request"].ToString();
+
+            FillTemplateRequest obj;
+            try
+            {
+                obj = JsonConvert.DeserializeObject<FillTemplateRequest>(request);
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
             string username = User.Identity.Name;
-            var filledTemplateId = await cvTemplateService.FillTemplate(new Model.Template { Elements = request.Elements, Id = request.Id }, username);
+            var filledTemplateId = await cvTemplateService.FillTemplate(new Model.Template { Elements = obj.Elements, Id = obj.Id }, username);
+
+            string uploads = Path.Combine(_hostingEnvironment.ContentRootPath, "StaticFiles", "FilledTemplate", filledTemplateId.ToString(), "profilePicture.jpg");
+            Directory.CreateDirectory(Path.GetDirectoryName(uploads));
+            if (form.Files["profilePicture"] != null)
+            {
+                using (Stream fileStream = new FileStream(uploads, FileMode.Create))
+                {
+                    await form.Files["profilePicture"].CopyToAsync(fileStream);
+                }
+            }
+
             await GeneratePdfAsync(filledTemplateId).ConfigureAwait(false);
 
             return new Model.Template();

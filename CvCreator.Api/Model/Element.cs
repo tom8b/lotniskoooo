@@ -10,6 +10,7 @@ namespace CvCreator.Api.Model
         public Size Size { get; set; }
         public Content Content { get; set; }
         public bool UserFillsOut { get; set; }
+        public bool IsProfilePicture { get; set; }
     }
 
     public class Content

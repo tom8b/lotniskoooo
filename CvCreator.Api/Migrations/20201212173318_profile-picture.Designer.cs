@@ -4,14 +4,16 @@ using CvCreator.Api;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CvCreator.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201212173318_profile-picture")]
+    partial class profilepicture
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -142,8 +144,6 @@ namespace CvCreator.Api.Migrations
                     b.Property<Guid?>("FilledTemplateId");
 
                     b.Property<string>("FilledText");
-
-                    b.Property<bool>("IsProfilePicture");
 
                     b.HasKey("Id");
 

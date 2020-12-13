@@ -17,5 +17,8 @@ namespace CvCreator.Api
         Task AddUserRate(Guid templateId, string username, int rate);
         Task UpdateUserRate(UserRatesTemplate userRatesTemplate);
         IEnumerable<Guid> GetUserRatesIds(string username);
+        List<(Guid templateId, int rate)> GetAuthorsRanking();
+        string GetAuthorFor(Guid templateId);
+        (int, int) GetRateFor(Guid templateId);
     }
 }

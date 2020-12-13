@@ -19,5 +19,6 @@ namespace CvCreator.Api.Model
         public Content Content { get; set; }
         public bool UserFillsOut { get; set; }
         public string Image { get; set; }
+        public bool IsProfilePicture { get; set; }
     }
 }

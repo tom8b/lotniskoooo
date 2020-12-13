@@ -81,6 +81,34 @@ namespace CvCreator.Api
             return dbContext.UserRatesTemplate.Where(x => x.Username.Equals(username)).Select(x => x.TemplateId);
         }
 
+        public List<(Guid templateId, int rate)> GetAuthorsRanking()
+        {
+            var res = dbContext.UserRatesTemplate.GroupBy(x => x.TemplateId, (templateId, items) => new { TemplateId = templateId, Sum = items.Sum(y => y.Rate) }).OrderByDescending(z => z.Sum);
+
+            List<(Guid templateId, int rate)> result = new List<(Guid templateId, int rate)>();
+
+            foreach(var x in res)
+            {
+                result.Add((x.TemplateId, x.Sum));
+            }
+
+            return result;
+        }
+
+        public string GetAuthorFor(Guid templateId)
+        {
+           var result = dbContext.CvTemplateModel.FirstOrDefault(x => x.Id.Equals(templateId))?.AuthorName;
+            return result;
+        }
+
+        public (int, int) GetRateFor(Guid templateId) // zwraca rate oraz ilosc glosow
+        {
+            var rate = dbContext.UserRatesTemplate.Where(x => x.TemplateId.Equals(templateId)).Sum(x => x.Rate);
+            var ratesCount = dbContext.UserRatesTemplate.Count(x => x.TemplateId.Equals(templateId));
+
+            return (rate, ratesCount); 
+        }
+
         public async Task AddUserRate(Guid templateId, string username, int rate)
         {
             await dbContext.AddAsync(new UserRatesTemplate { Rate = rate, TemplateId = templateId, Username = username });

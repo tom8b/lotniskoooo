@@ -66,7 +66,7 @@ namespace CvCreator.Api
             {
                 FilledElements = template.Elements
                 .Where(x => x.UserFillsOut == true)
-                .Select(x => new FilledElement { FilledText = x.Content.Text, ElementId = x.Id}).ToList(),
+                .Select(x => new FilledElement { FilledText = x.Content.Text, ElementId = x.Id, IsProfilePicture = x.IsProfilePicture}).ToList(),
                 TemplateId = template.Id,
                 UserId = username
             };
@@ -88,7 +88,7 @@ namespace CvCreator.Api
             int rateChecked;
             if (rate == 0)
             {
-                rateChecked = 0;
+                rateChecked = -1;
             }
             else
             {
@@ -108,6 +108,11 @@ namespace CvCreator.Api
             }
         }
 
+        public (int, int) GetRatesFor(Guid templateId)
+        {
+            return templateRepository.GetRateFor(templateId);
+        }
+
         //zwraca template i guida TemplateId!
         public async Task<(Template, Guid)> GetFilledTemplate(Guid filledTemplateId)
         {
@@ -124,7 +129,8 @@ namespace CvCreator.Api
                 },
                 Position = template.Elements.FirstOrDefault(y => y.Id.Equals(x.ElementId)).Position,
                 Size = template.Elements.FirstOrDefault(y => y.Id.Equals(x.ElementId)).Size,
-                UserFillsOut = true
+                UserFillsOut = true,
+                IsProfilePicture = x.IsProfilePicture
             });
             var elements = mappedFilledElements.Concat(template.Elements.Where(x => x.UserFillsOut == false));
 
@@ -134,6 +140,27 @@ namespace CvCreator.Api
                 Id = filledTemplate.Id,
                 Elements = elements
             }, filledTemplate.TemplateId);
+        }
+
+        public Dictionary<string, int> GetAuthorsRanking()
+        {
+            var cvs = templateRepository.GetAuthorsRanking();
+            var dictionary = new Dictionary<string, int>();
+            foreach(var x in cvs)
+            {
+                var authorName = templateRepository.GetAuthorFor(x.templateId);
+                var authorNameNotNull = authorName == null ? " " : authorName;
+                if(dictionary.Keys.Contains(authorNameNotNull))
+                {
+                    dictionary[authorNameNotNull] += x.rate;
+                }
+                else
+                {
+                    dictionary.Add(authorNameNotNull, x.rate);
+                }
+            }
+
+            return dictionary;
         }
     }
 }
