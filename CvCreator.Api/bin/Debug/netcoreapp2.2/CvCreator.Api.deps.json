@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.2",
-    "signature": "44fb20b2f0743fb2146e4c87c144dd66c269d7d8"
+    "signature": "550a39625cfbe459ba097ab869beabd66c4371b9"
   },
   "compilationOptions": {
     "defines": [
@@ -24,6 +24,7 @@
     ".NETCoreApp,Version=v2.2": {
       "CvCreator.Api/1.0.0": {
         "dependencies": {
+          "CoreHtmlToImage": "1.0.6",
           "Microsoft.AspNetCore.App": "2.2.0",
           "Microsoft.AspNetCore.Razor.Design": "2.2.0",
           "Microsoft.EntityFrameworkCore": "2.2.2",
@@ -37,6 +38,17 @@
         },
         "compile": {
           "CvCreator.Api.dll": {}
+        }
+      },
+      "CoreHtmlToImage/1.0.6": {
+        "runtime": {
+          "lib/netstandard2.0/CoreHtmlToImage.dll": {
+            "assemblyVersion": "1.0.6.0",
+            "fileVersion": "1.0.6.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/CoreHtmlToImage.dll": {}
         }
       },
       "jsreport.AspNetCore/2.1.0": {
@@ -3355,6 +3367,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "CoreHtmlToImage/1.0.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-O5TZhjxIV4T3ayZPLJqLQ/KFhu5NllrLqKi+YbKbmjLs11fPGAxrZkidYAvOSCTFqlEJ92AQX0Epb8m2Q4EH7Q==",
+      "path": "corehtmltoimage/1.0.6",
+      "hashPath": "corehtmltoimage.1.0.6.nupkg.sha512"
     },
     "jsreport.AspNetCore/2.1.0": {
       "type": "package",

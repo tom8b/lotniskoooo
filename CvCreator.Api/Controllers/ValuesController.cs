@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using CoreHtmlToImage;
 using CvCreator.Api.JsReport;
 using CvCreator.Api.Model;
 using jsreport.AspNetCore;
@@ -194,7 +195,10 @@ namespace CvCreator.Api.Controllers
                 throw;
             }
             string username = User.Identity.Name;
+          
             var filledTemplateId = await cvTemplateService.FillTemplate(new Model.Template { Elements = obj.Elements, Id = obj.Id }, username);
+
+         
 
             string uploads = Path.Combine(_hostingEnvironment.ContentRootPath, "StaticFiles", "FilledTemplate", filledTemplateId.ToString(), "profilePicture.jpg");
             Directory.CreateDirectory(Path.GetDirectoryName(uploads));
@@ -275,6 +279,39 @@ namespace CvCreator.Api.Controllers
 
                     throw;
                 } 
+            }
+
+            await GenerateTemplatePicture(entity.Id);
+        }
+
+        private async Task GenerateTemplatePicture(Guid templateId)
+        { 
+            var template = await cvTemplateService.GetByIdAsync(templateId);
+
+            var content = string.Empty;
+            string uploads = Path.Combine(_hostingEnvironment.ContentRootPath.Replace("\\", "/"), "StaticFiles");
+            Directory.CreateDirectory(Path.GetDirectoryName(uploads));
+
+            foreach (var element in template.Elements.OrderBy(x => x.Content.ZIndex))
+            {
+                var ElemenetStyleBuilder = new ElementStyleBuilder(element.Position.X, element.Position.Y, element.Size.X, element.Size.Y);
+                var style = ElemenetStyleBuilder.WithZIndex(0).WithFontSize(element.Content.FontSize).WithBackgroundColor("red").Build();
+                var imagePath = $"file:///{uploads}/{templateId}/{element.Id}.jpg";
+                var htmlElement = new HtmlElement(style, element.Content.Text, imagePath, 0);
+                content += htmlElement.GetElement();
+            }
+
+            var mainContent = $"<img alt=\"\" style=\"; position: absolute; top: 0; left: 0; padding: 0; margin-top: 0; vertical-align: middle \" width=594 height=840 src=\"file:///{uploads}/{templateId}/backgroundImage.jpg\" /><div>{content}</div>";
+
+            var converter = new HtmlConverter();
+
+            var bytes = converter.FromHtmlString(mainContent, 594);
+            using (var ms = new MemoryStream(bytes))
+            {
+                using (var fs = new FileStream(Path.Combine(uploads, templateId.ToString(), "template.jpg"), FileMode.Create))
+                {
+                    ms.WriteTo(fs);
+                }
             }
         }
 
