@@ -53,13 +53,14 @@ namespace CvCreator.Api.Controllers
             foreach (var element in template.Elements.OrderBy(x => x.Content.ZIndex))
             {
                 var ElemenetStyleBuilder = new ElementStyleBuilder(element.Position.X, element.Position.Y, element.Size.X, element.Size.Y);
-                var style = ElemenetStyleBuilder.WithZIndex(0).WithFontSize(element.Content.FontSize).WithBackgroundColor("red").Build();
+                //var style = ElemenetStyleBuilder.WithZIndex(0).WithFontSize(element.Content.FontSize).WithBackgroundColor("red").Build();
+                var style = ElemenetStyleBuilder.WithZIndex(0).WithFontSize(element.Content.FontSize).Build();
                 var imagePath = element.IsProfilePicture ? $"file:///{uploads}/FilledTemplate/{filledTemplateId.ToString()}/profilePicture.jpg" :  $"file:///{uploads}/{templateId}/{element.Id}.jpg";
                 var htmlElement = new HtmlElement(style, element.Content.Text, imagePath, 0);
                 content += htmlElement.GetElement();
             } 
 
-            var mainContent = $"<img alt=\"\" style=\"; position: absolute; top: 0; left: 0; padding: 0; margin-top: 0; vertical-align: middle \" width=594 height=840 src=\"file:///{uploads}/{templateId}/backgroundImage.jpg\" /><div>{content}</div>";
+            var mainContent = $"<img alt=\"\" onerror=\"this.style.display = 'none'\" style=\"; position: absolute; top: 0; left: 0; padding: 0; margin-top: 0; vertical-align: middle \" width=594 height=840 src=\"file:///{uploads}/{templateId}/backgroundImage.jpg\" /><div>{content}</div>";
             Report report;
             try
             {
@@ -295,7 +296,8 @@ namespace CvCreator.Api.Controllers
             foreach (var element in template.Elements.OrderBy(x => x.Content.ZIndex))
             {
                 var ElemenetStyleBuilder = new ElementStyleBuilder(element.Position.X, element.Position.Y, element.Size.X, element.Size.Y);
-                var style = ElemenetStyleBuilder.WithZIndex(0).WithFontSize(element.Content.FontSize).WithBackgroundColor("red").Build();
+                //var style = ElemenetStyleBuilder.WithZIndex(0).WithFontSize(element.Content.FontSize).WithBackgroundColor("red").Build();
+                var style = ElemenetStyleBuilder.WithZIndex(0).WithFontSize(element.Content.FontSize).Build();
                 var imagePath = $"file:///{uploads}/{templateId}/{element.Id}.jpg";
                 var htmlElement = new HtmlElement(style, element.Content.Text, imagePath, 0);
                 content += htmlElement.GetElement();

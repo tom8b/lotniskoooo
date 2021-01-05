@@ -31,8 +31,7 @@ namespace CvCreator.Api
             {
 
                 throw;
-            }
-       
+            } 
         }
 
         public async Task<CvTemplateModel> GetByIdAsync(Guid id)
