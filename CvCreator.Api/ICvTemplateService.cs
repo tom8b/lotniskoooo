@@ -17,5 +17,6 @@ namespace CvCreator.Api
         IEnumerable<Guid> GetIdsNotRatedBy(string username);
         Dictionary<string, int> GetAuthorsRanking();
         (int, int) GetRatesFor(Guid templateId);
+        string GetAuthorFor(Guid templateId);
     }
 }

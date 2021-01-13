@@ -18,5 +18,6 @@ namespace CvCreator.Api.Model
         public Guid Id { get; set; }
         public int Rate { get; set; }
         public int RatesCount { get; set; }
+        public string AuthorName { get; set; }
     }
 }

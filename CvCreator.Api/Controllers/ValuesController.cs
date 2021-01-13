@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -40,6 +41,37 @@ namespace CvCreator.Api.Controllers
         public async Task<ActionResult<IEnumerable<string>>> Get()
         {     
             return new string[] { "value1", "value2" };
+        }
+
+        private async Task GenerateFilledTemplatePicture(Guid filledTemplateId)
+        {
+            var (template, templateId) = await cvTemplateService.GetFilledTemplate(filledTemplateId);
+
+            var content = string.Empty;
+            string uploads = Path.Combine(_hostingEnvironment.ContentRootPath.Replace("\\", "/"), "StaticFiles");
+            Directory.CreateDirectory(Path.GetDirectoryName(uploads));
+
+            foreach (var element in template.Elements.OrderBy(x => x.Content.ZIndex))
+            {
+                var ElemenetStyleBuilder = new ElementStyleBuilder(element.Position.X, element.Position.Y, element.Size.X, element.Size.Y);
+                var style = ElemenetStyleBuilder.WithZIndex(0).WithFontSize(element.Content.FontSize).Build();
+                var imagePath = element.IsProfilePicture ? $"file:///{uploads}/FilledTemplate/{filledTemplateId.ToString()}/profilePicture.jpg" : $"file:///{uploads}/{templateId}/{element.Id}.jpg";
+                var htmlElement = new HtmlElement(style, element.Content.Text, imagePath, 0);
+                content += htmlElement.GetElement();
+            }
+
+            var mainContent = $"<img alt=\"\" style=\"; position: absolute; top: 0; left: 0; padding: 0; margin-top: 0; vertical-align: middle \" width=594 height=840 src=\"file:///{uploads}/{templateId}/backgroundImage.jpg\" /><div>{content}</div>";
+
+            var converter = new HtmlConverter();
+
+            var bytes = converter.FromHtmlString(mainContent, 594);
+            using (var ms = new MemoryStream(bytes))
+            {
+                using (var fs = new FileStream(Path.Combine(uploads, "GeneratedPdfs", filledTemplateId.ToString(), "filledTemplate.jpg"), FileMode.Create))
+                {
+                    ms.WriteTo(fs);
+                }
+            }
         }
 
         private async Task GeneratePdfAsync(Guid filledTemplateId)
@@ -109,7 +141,7 @@ namespace CvCreator.Api.Controllers
             foreach(var id in ids)
             {
                 (var rate, var count) = cvTemplateService.GetRatesFor(id);
-                result.Ids.Add(new SingleTemplate { Id = id, Rate = rate, RatesCount = count });
+                result.Ids.Add(new SingleTemplate { Id = id, Rate = rate, RatesCount = count, AuthorName = cvTemplateService.GetAuthorFor(id)});
             }
 
             return result;
@@ -132,6 +164,8 @@ namespace CvCreator.Api.Controllers
             {
                 result.AuthorWithRates.Add(new AuthorWithRates { Author = x.Key, Rate = x.Value });
             }
+
+            result.AuthorWithRates = result.AuthorWithRates.OrderByDescending(x => x.Rate).ToList();
 
             return result;
         }
@@ -211,7 +245,16 @@ namespace CvCreator.Api.Controllers
                 }
             }
 
-            await GeneratePdfAsync(filledTemplateId).ConfigureAwait(false);
+            try
+            {
+                await GeneratePdfAsync(filledTemplateId).ConfigureAwait(false);
+                await GenerateFilledTemplatePicture(filledTemplateId).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
 
             return new Model.Template();
         }
@@ -283,6 +326,24 @@ namespace CvCreator.Api.Controllers
             }
 
             await GenerateTemplatePicture(entity.Id);
+        }
+
+        [HttpPost("getImageSize")]
+        public async Task<ActionResult<object>> GetImageSize([FromForm]IFormCollection form)
+        {
+            int width = 0;
+            int height = 0;
+
+            if (form.Files["img"] != null)
+            {
+                using (var image = Image.FromStream(form.Files["img"].OpenReadStream()))
+                {
+                    width = image.Width;
+                    height = image.Height;
+                }
+            }
+
+            return new { width, height };
         }
 
         private async Task GenerateTemplatePicture(Guid templateId)

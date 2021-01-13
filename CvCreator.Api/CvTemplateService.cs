@@ -113,6 +113,11 @@ namespace CvCreator.Api
             return templateRepository.GetRateFor(templateId);
         }
 
+        public string GetAuthorFor(Guid templateId)
+        {
+            return templateRepository.GetAuthorFor(templateId);
+        }
+
         //zwraca template i guida TemplateId!
         public async Task<(Template, Guid)> GetFilledTemplate(Guid filledTemplateId)
         {
