@@ -35,7 +35,7 @@ namespace CvCreator.Api
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   builder =>
                                   {
-                                      builder.WithOrigins("http://localhost:3000").AllowAnyHeader()
+                                      builder.WithOrigins("http://localhost:4200").AllowAnyHeader()
                                                   .AllowAnyMethod();
                                   });
             });
@@ -46,6 +46,8 @@ namespace CvCreator.Api
             services.AddIdentity<ApplicationUser, IdentityRole>()
            .AddEntityFrameworkStores<ApplicationDbContext>()
            .AddDefaultTokenProviders();
+
+            services.AddSingleton<IInMemoryStorage, InMemoryStorage>();
 
             services.AddAuthentication(options =>
             {
@@ -67,8 +69,6 @@ namespace CvCreator.Api
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
                 };
             });
-            services.AddScoped<ICvTemplateRepository, CvTemplateRepository>();
-            services.AddScoped<ICvTemplateService, CvTemplateService>();
 
             services.AddJsReport(new LocalReporting()
                 .UseBinary(JsReportBinary.GetBinary())
@@ -93,12 +93,7 @@ namespace CvCreator.Api
             app.UseAuthentication();
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-        Path.Combine(env.ContentRootPath, "StaticFiles")),
-                RequestPath = "/StaticFiles"
-            });
+      
             app.UseMvc();
         }
     }

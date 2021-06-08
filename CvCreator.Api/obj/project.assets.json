@@ -12358,11 +12358,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\SourceCode\\PRACA_INZYNIERSKA\\SERWER\\CvCreator.Api\\CvCreator.Api\\CvCreator.Api.csproj",
+      "projectUniqueName": "F:\\SourceCode\\Airport\\API2\\CvCreator.Api\\CvCreator.Api\\CvCreator.Api.csproj",
       "projectName": "CvCreator.Api",
-      "projectPath": "F:\\SourceCode\\PRACA_INZYNIERSKA\\SERWER\\CvCreator.Api\\CvCreator.Api\\CvCreator.Api.csproj",
+      "projectPath": "F:\\SourceCode\\Airport\\API2\\CvCreator.Api\\CvCreator.Api\\CvCreator.Api.csproj",
       "packagesPath": "C:\\Users\\tomek\\.nuget\\packages\\",
-      "outputPath": "F:\\SourceCode\\PRACA_INZYNIERSKA\\SERWER\\CvCreator.Api\\CvCreator.Api\\obj\\",
+      "outputPath": "F:\\SourceCode\\Airport\\API2\\CvCreator.Api\\CvCreator.Api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -12380,6 +12380,7 @@
       },
       "frameworks": {
         "netcoreapp2.2": {
+          "targetAlias": "netcoreapp2.2",
           "projectReferences": {}
         }
       },
@@ -12391,6 +12392,7 @@
     },
     "frameworks": {
       "netcoreapp2.2": {
+        "targetAlias": "netcoreapp2.2",
         "dependencies": {
           "CoreHtmlToImage": {
             "target": "Package",
@@ -12435,10 +12437,16 @@
           }
         },
         "imports": [
-          "net461"
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
         ],
         "assetTargetFallback": true,
-        "warn": true
+        "warn": true,
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
       }
     }
   }

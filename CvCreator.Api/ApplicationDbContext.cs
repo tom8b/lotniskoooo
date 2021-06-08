@@ -1,14 +1,13 @@
-﻿using CvCreator.Api.Model;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CvCreator.Api
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public DbSet<CvTemplateModel> CvTemplateModel { get; set; }
-        public DbSet<FilledTemplate> FilledTemplate { get; set; }
-        public DbSet<UserRatesTemplate> UserRatesTemplate { get; set; }
+        //public DbSet<CvTemplateModel> CvTemplateModel { get; set; }
+        //public DbSet<FilledTemplate> FilledTemplate { get; set; }
+        //public DbSet<UserRatesTemplate> UserRatesTemplate { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
