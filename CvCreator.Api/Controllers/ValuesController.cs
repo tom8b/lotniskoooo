@@ -65,5 +65,20 @@ namespace CvCreator.Api.Controllers
         {
             return _inMemoryStorage.GetArticles;
         }
+
+
+        [HttpPost("addConnection")]
+        public void AddConnection(Connection request)
+        {
+            _inMemoryStorage.GetConnections.
+            _inMemoryStorage.AddConnection(request);
+        }
+
+        [HttpGet("getAirports")]
+        public List<Airport> GetAllAirports()
+        {
+            return _inMemoryStorage.GetAirports;
+        }
+
     }
 }
